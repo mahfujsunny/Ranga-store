@@ -50,14 +50,22 @@ const showProducts = (products) => {
   }
 };
 
-
+/******************************** 
+   Function Calling For Cart 
+*********************************/
 let count = 0;
 const addToCart = (id, price) => {
   count = count + 1;
+
+  // Main Price
   updatePrice("price", price);
 
+  // Tax and Delivery charge
   updateTaxAndCharge();
   document.getElementById("total-Products").innerText = count;
+
+  // Grand Total
+  updateTotal();
 };
 
 const getInputValue = (id) => {
@@ -111,6 +119,6 @@ const updateTotal = () => {
     getInputValue("total-tax");
   document.getElementById("total").innerText = grandTotal.toFixed(2);
 }
-updateTotal();
+
 
 loadProducts();

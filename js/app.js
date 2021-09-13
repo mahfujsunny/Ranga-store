@@ -7,12 +7,13 @@ const loadProducts = () => {
 };
 
 
+
 /***************************** 
    show all product in UI 
 ******************************/
 const showProducts = (products) => {
-
-  const allProducts = products.map((pd) => pd);
+  
+  const allProducts = products.map((product) => product);
 
   //loop
   for (const product of allProducts) {
@@ -27,7 +28,7 @@ const showProducts = (products) => {
         </div>
 
         <div class="card-body">
-          <h3 class="card-title">${product.title.slice(0,59)}</h3>
+          <h3 class="card-title" style="font-family:Dancing Script">${product.title.slice(0,59)}</h3>
           <p>Category: ${product.category}</p>
           <h2>Price: $ ${product.price}</h2>
         </div>
@@ -41,7 +42,7 @@ const showProducts = (products) => {
         <div class="card-footer">
             <button onclick="addToCart(${product.id},${product.price})" id="addToCart-btn" class="buy-now btn btn-success">add to cart</button>
 
-            <button id="details-btn" class="buy-now btn btn-danger">Details</button>
+            <button onclick="loadDetails(${product.id})" class="buy-now btn btn-danger">Details</button>
         </div>
         
     </div>
@@ -120,5 +121,49 @@ const updateTotal = () => {
   document.getElementById("total").innerText = grandTotal.toFixed(2);
 }
 
-
 loadProducts();
+
+
+
+
+/***************************
+     Details field (optional) 
+*****************************/
+
+const loadDetails = (id) => {
+  const url = `https://fakestoreapi.com/products/${id}`;
+  fetch(url)
+    .then(res => res.json())
+    .then(data => displayDetails(data))
+}
+
+const displayDetails = details => {
+  const showDetails = document.getElementById('details');
+
+  showDetails.textContent= '';
+
+  const detailsDiv = document.createElement('div');
+  detailsDiv.classList.add('col');
+  detailsDiv.innerHTML = `
+    <div class="card mb-3 mx-auto w-50 bg-warning">
+      <div class="row g-0">
+        <div class="col-md-4">
+          <img src="${details.image}" class="img-fluid rounded-start" alt="...">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 class="card-title fs-2 fw-bold">${details.title}</h5>
+            <h6 class="card-title fw-bold">Category : ${details.category}</h6>
+            <p class="card-text">${details.description.slice(0,200)}</p>
+
+            <p class="p-0 fw-bold text-danger"> Reviews <i class="fas fa-user"></i> ${details.rating.count}</p> 
+
+            <p class="p-0 fw-bold text-danger">Ratings <i class="fas fa-star-half-alt"></i>  ${details.rating.rate}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  showDetails.appendChild(detailsDiv);
+}  
+
